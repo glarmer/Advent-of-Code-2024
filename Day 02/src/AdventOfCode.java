@@ -11,7 +11,7 @@ public class AdventOfCode {
         return intRow;
     }
 
-    public boolean validateRow(ArrayList<Integer> row, boolean levelRemoved) {
+    public boolean validateRow(ArrayList<Integer> row, int task, boolean levelRemoved) {
         boolean decreasing = true;
         boolean increasing = true;
         boolean errored = false;
@@ -19,7 +19,6 @@ public class AdventOfCode {
             if (Math.abs(row.get(i) - row.get(i - 1)) > 3 || Math.abs(row.get(i) - row.get(i - 1)) < 1) {
                 errored = true;
             }
-            // increasing
             if (row.get(i - 1) < row.get(i)) {
                 decreasing = false;
             }
@@ -31,13 +30,15 @@ public class AdventOfCode {
             }
         }
 
-        if (errored && !levelRemoved) {
-            for (int i = 0; i < row.size(); i++) {
-                ArrayList<Integer> copy = new ArrayList<>(row);
-                copy.remove(i);
-                boolean result = validateRow(copy, true);
-                if (result) {
-                    return true;
+        if (task == 2) {
+            if (errored && !levelRemoved) {
+                for (int i = 0; i < row.size(); i++) {
+                    ArrayList<Integer> copy = new ArrayList<>(row);
+                    copy.remove(i);
+                    boolean result = validateRow(copy, 2, true);
+                    if (result) {
+                        return true;
+                    }
                 }
             }
         }
