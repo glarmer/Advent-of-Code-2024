@@ -21,10 +21,11 @@ foreach line [split $lines \n] {
     }
 }
 
-proc fixUpdate {update previousPages argRules} {
+proc fixUpdate {update argRules} {
     #puts $update
     set index 0
     array set rules $argRules
+    set previousPages []
     foreach page $update {
         #puts "COMPARISON"
         puts $update
@@ -40,13 +41,23 @@ proc fixUpdate {update previousPages argRules} {
                     set temp [lindex $update $index]
                     lset update $index [lindex $update $index2]
                     lset update $index2 $temp
-                    
-                    set update [fixUpdate $update [list ] [array get rules]]
+
+                    set testPages [lrange $update 0 $index]
+                    foreach testPage $testPages {
+                        if {[lsearch -exact $rules($page) $testPage] >= 0} {
+                            set update [fixUpdate $update [array get rules]]
+                        } 
+                    }
+                    #set update [fixUpdate $update [array get rules]]
                 } 
             }
         }
         incr index
-        lappend previousPages $page
+        set previousPages [lrange $update 0 $index]
+        if {$previousPages == $update} {
+            puts "RETURNED"
+            return $update
+        }
     }
     return $update
 }
@@ -62,7 +73,7 @@ foreach line [split $lines \n] {
     #Iterate over each 'update' e.g. 61,13,29
     puts "1"
     puts $update
-    set newUpdate [fixUpdate $update $previousPages [array get rules]]
+    set newUpdate [fixUpdate $update [array get rules]]
     puts "2"
     puts $newUpdate
 
