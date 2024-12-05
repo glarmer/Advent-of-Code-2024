@@ -43,6 +43,9 @@ proc fixUpdate {update previousPages argRules} {
                 puts [lsearch -exact $rules($page) $previousPage]
                 if {[lsearch -exact $rules($page) $previousPage] >= 0} {
                     set index2 [lsearch $update $previousPage]
+                    set list2 [lrange $update 0 end]
+                    puts "FUCK"
+                    puts $list2
                     set invalid "true"
                     set temp [lindex $update $index]
                     lset update $index [lindex $update $index2]
@@ -52,6 +55,11 @@ proc fixUpdate {update previousPages argRules} {
                     #puts $previousPage
                     puts $update
                     #puts "INVALID"
+
+                    if {$update == $list2} {
+                        puts "HELLO BABY"
+                        return $update
+                    }
 
                     if {[lindex $update 0] == "93" && [lindex $update 1] == "73" && [lindex $update 2] == "42" && 
                     [lindex $update 3] == "67" && [lindex $update 4] == "26" && [lindex $update 5] == "35" && 
