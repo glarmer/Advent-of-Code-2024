@@ -26,55 +26,22 @@ proc fixUpdate {update previousPages argRules} {
     set index 0
     array set rules $argRules
     foreach page $update {
+        #puts "COMPARISON"
+        puts $update
+        puts "PREVIOUS PAGES"
+        puts $previousPages
+        puts [llength $previousPages]
+        #puts [expr ([llength $update] - 2)]
         if {[info exists ::rules($page)] != 0} {
-            #Check if it violates any rules
-            #puts "START"
-            #puts $page
-            #puts $rules($page)
-            #puts $update
-            #puts $index
-            
-            
             foreach previousPage $previousPages {
-                #puts "hi"
-                #puts $rules($page)
-                #puts $previousPage
-                puts $update
-                puts [lsearch -exact $rules($page) $previousPage]
                 if {[lsearch -exact $rules($page) $previousPage] >= 0} {
+                    
                     set index2 [lsearch $update $previousPage]
-                    set list2 [lrange $update 0 end]
-                    puts "FUCK"
-                    puts $list2
-                    set invalid "true"
                     set temp [lindex $update $index]
                     lset update $index [lindex $update $index2]
                     lset update $index2 $temp
                     
-                    #puts $index2
-                    #puts $previousPage
-                    puts $update
-                    #puts "INVALID"
-
-                    if {$update == $list2} {
-                        puts "HELLO BABY"
-                        return $update
-                    }
-
-                    if {[lindex $update 0] == "93" && [lindex $update 1] == "73" && [lindex $update 2] == "42" && 
-                    [lindex $update 3] == "67" && [lindex $update 4] == "26" && [lindex $update 5] == "35" && 
-                    [lindex $update 6] == "71" && [lindex $update 7] == "66" && [lindex $update 8] == "45" && 
-                    [lindex $update 9] == "96" && [lindex $update 10] == "95" && [lindex $update 11] == "88" && 
-                    [lindex $update 12] == "81" && [lindex $update 13] == "24" && [lindex $update 14] == "86"} { 
-                        puts [lsearch -exact $rules($page) $previousPage]
-                        puts $previousPage
-                        puts $rules($page)
-                        puts "HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-                        puts $update
-                        return $update
-                    }
-
-                    set update [fixUpdate $update [list 0] [array get rules]]
+                    set update [fixUpdate $update [list ] [array get rules]]
                 } 
             }
         }
@@ -89,7 +56,7 @@ set count2 0
 set lines [string range $updatesText 0 end]
 foreach line [split $lines \n] {
     set update [split $line ","]
-    set previousPages [list 0]
+    set previousPages [list ]
     set invalid "false"
     
     #Iterate over each 'update' e.g. 61,13,29
